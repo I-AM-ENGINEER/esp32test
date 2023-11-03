@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Real-Time Update</title>
+</head>
+<body>
+
+<div>
+    <p>Current Value: <span id="displayValue"></span></p>
+    <label for="textInput1">Text Input 1:</label>
+    <input type="text" id="textInput1">
+    <br>
+    <label for="textInput2">Text Input 2:</label>
+    <input type="text" id="textInput2">
+    <br>
+    <button onclick="sendData()">Send Data</button>
+</div>
+
+<script>
+function updateValue() {
+    // Function to update the value every second using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById("displayValue").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.open("GET", "/?u", true);
+    xhr.send();
+}
+
+// Update the value every second
+setInterval(updateValue, 5000);
+
+function sendData() {
+    // Function to send data from text inputs to the server using AJAX
+    var textInput1Value = document.getElementById("textInput1").value;
+    var textInput2Value = document.getElementById("textInput2").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("textInput1=" + textInput1Value + "&textInput2=" + textInput2Value);
+}
+</script>
+
+</body>
+</html>
